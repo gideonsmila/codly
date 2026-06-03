@@ -1,0 +1,622 @@
+:host {
+  all: initial;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #c0caf5;
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Floating Action Button ── */
+
+.codly-fab {
+  position: fixed;
+  z-index: 2147483647;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid rgba(122, 162, 247, 0.3);
+  background: linear-gradient(135deg, #1a1b26 0%, #24283b 100%);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 12px rgba(122, 162, 247, 0.15);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  animation: codly-fadeIn 0.15s ease-out;
+}
+
+.codly-fab:hover {
+  border-color: rgba(122, 162, 247, 0.6);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6), 0 0 20px rgba(122, 162, 247, 0.25);
+  transform: scale(1.08);
+}
+
+.codly-fab svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: #7aa2f7;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ── Explanation Panel ── */
+
+.codly-panel {
+  position: fixed;
+  z-index: 2147483647;
+  width: 460px;
+  max-width: calc(100vw - 32px);
+  max-height: 80vh;
+  border-radius: 14px;
+  border: 1px solid rgba(122, 162, 247, 0.15);
+  background: linear-gradient(160deg, #1a1b26 0%, #1e2030 50%, #1a1b26 100%);
+  box-shadow:
+    0 8px 40px rgba(0, 0, 0, 0.6),
+    0 0 1px rgba(122, 162, 247, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: codly-slideUp 0.25s ease-out;
+}
+
+/* ── Panel Header ── */
+
+.codly-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(122, 162, 247, 0.1);
+  background: rgba(36, 40, 59, 0.5);
+  gap: 8px;
+}
+
+.codly-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #c0caf5;
+  letter-spacing: 0.01em;
+  min-width: 0;
+  flex: 1;
+}
+
+.codly-panel-title svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: #7aa2f7;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+}
+
+.codly-header-file {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 400;
+  color: #565f89;
+  background: rgba(47, 51, 73, 0.5);
+  padding: 2px 8px 2px 5px;
+  border-radius: 6px;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.codly-header-file svg {
+  width: 12px;
+  height: 12px;
+  stroke: #565f89;
+  flex-shrink: 0;
+}
+
+.codly-panel-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+/* ── Copy Button ── */
+
+.codly-copy-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: #565f89;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.codly-copy-btn:hover {
+  background: rgba(122, 162, 247, 0.12);
+  color: #7aa2f7;
+}
+
+.codly-copy-btn.copied {
+  color: #9ece6a;
+}
+
+.codly-copy-btn svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ── Close Button ── */
+
+.codly-close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: #565f89;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.codly-close-btn:hover {
+  background: rgba(247, 118, 142, 0.15);
+  color: #f7768e;
+}
+
+.codly-close-btn svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+}
+
+/* ── Context Toggle ── */
+
+.codly-context-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  border-bottom: 1px solid rgba(122, 162, 247, 0.07);
+  background: rgba(30, 32, 48, 0.4);
+}
+
+.codly-context-label {
+  font-size: 12px;
+  color: #565f89;
+}
+
+.codly-toggle {
+  position: relative;
+  width: 38px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.codly-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.codly-toggle-track {
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  background: #2f3349;
+  transition: background 0.2s ease;
+}
+
+.codly-toggle input:checked + .codly-toggle-track {
+  background: #3d59a1;
+}
+
+.codly-toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #565f89;
+  transition: all 0.2s ease;
+}
+
+.codly-toggle input:checked ~ .codly-toggle-thumb {
+  left: 20px;
+  background: #7aa2f7;
+}
+
+/* ── Selected Text Preview ── */
+
+.codly-selected-preview {
+  padding: 10px 16px;
+  border-bottom: 1px solid rgba(122, 162, 247, 0.07);
+  max-height: 90px;
+  overflow-y: auto;
+}
+
+.codly-selected-preview code {
+  font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 11.5px;
+  line-height: 1.6;
+  color: #a9b1d6;
+  background: rgba(47, 51, 73, 0.5);
+  padding: 8px 12px;
+  border-radius: 8px;
+  display: block;
+  white-space: pre-wrap;
+  word-break: break-word;
+  border: 1px solid rgba(122, 162, 247, 0.08);
+}
+
+/* ── Badges ── */
+
+.codly-badges-container {
+  min-height: 0;
+}
+
+.codly-badges {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-bottom: 1px solid rgba(122, 162, 247, 0.07);
+  flex-wrap: wrap;
+  animation: codly-fadeIn 0.2s ease-out;
+}
+
+.codly-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 9px;
+  border-radius: 6px;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+.codly-badge svg {
+  width: 12px;
+  height: 12px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+}
+
+.codly-badge-file {
+  color: #7aa2f7;
+  background: rgba(122, 162, 247, 0.1);
+  border: 1px solid rgba(122, 162, 247, 0.15);
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.codly-badge-ext {
+  color: #e0af68;
+  background: rgba(224, 175, 104, 0.1);
+  border: 1px solid rgba(224, 175, 104, 0.2);
+  font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+  font-size: 10.5px;
+}
+
+.codly-badge-lang {
+  color: #c0caf5;
+  background: rgba(192, 202, 245, 0.08);
+  border: 1px solid rgba(192, 202, 245, 0.12);
+}
+
+.codly-lang-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.codly-badge-version {
+  color: #9ece6a;
+  background: rgba(158, 206, 106, 0.08);
+  border: 1px solid rgba(158, 206, 106, 0.15);
+}
+
+.codly-badge-framework {
+  color: #bb9af7;
+  background: rgba(187, 154, 247, 0.08);
+  border: 1px solid rgba(187, 154, 247, 0.15);
+}
+
+/* ── Content Area ── */
+
+.codly-panel-content {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  min-height: 60px;
+}
+
+.codly-panel-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.codly-panel-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.codly-panel-content::-webkit-scrollbar-thumb {
+  background: rgba(86, 95, 137, 0.4);
+  border-radius: 3px;
+}
+
+.codly-panel-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(86, 95, 137, 0.6);
+}
+
+/* ── Loading State ── */
+
+.codly-loading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 0;
+  color: #565f89;
+  font-size: 13px;
+}
+
+.codly-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(122, 162, 247, 0.2);
+  border-top-color: #7aa2f7;
+  border-radius: 50%;
+  animation: codly-spin 0.7s linear infinite;
+}
+
+/* ── Streaming Cursor ── */
+
+.codly-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 14px;
+  background: #7aa2f7;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: codly-blink 0.8s step-end infinite;
+}
+
+/* ── Error State ── */
+
+.codly-error {
+  padding: 14px 16px;
+  background: rgba(247, 118, 142, 0.08);
+  border: 1px solid rgba(247, 118, 142, 0.2);
+  border-radius: 10px;
+  color: #f7768e;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* ── Quick Action Buttons ── */
+
+.codly-quick-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-top: 1px solid rgba(122, 162, 247, 0.07);
+  background: rgba(30, 32, 48, 0.3);
+  overflow-x: auto;
+}
+
+.codly-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px;
+  border: 1px solid rgba(122, 162, 247, 0.12);
+  border-radius: 8px;
+  background: rgba(47, 51, 73, 0.3);
+  color: #565f89;
+  font-size: 11.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.codly-action-btn svg {
+  width: 13px;
+  height: 13px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+}
+
+.codly-action-btn:hover {
+  color: #a9b1d6;
+  background: rgba(47, 51, 73, 0.6);
+  border-color: rgba(122, 162, 247, 0.25);
+}
+
+.codly-action-btn.active {
+  color: #7aa2f7;
+  background: rgba(122, 162, 247, 0.12);
+  border-color: rgba(122, 162, 247, 0.35);
+}
+
+/* ── Markdown Content ── */
+
+.codly-markdown h1,
+.codly-markdown h2,
+.codly-markdown h3 {
+  color: #c0caf5;
+  margin: 14px 0 6px;
+  font-weight: 600;
+}
+
+.codly-markdown h1 { font-size: 17px; }
+.codly-markdown h2 { font-size: 15px; }
+.codly-markdown h3 { font-size: 13.5px; }
+
+.codly-markdown p {
+  margin: 6px 0;
+  color: #a9b1d6;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.codly-markdown ul,
+.codly-markdown ol {
+  margin: 6px 0;
+  padding-left: 20px;
+  color: #a9b1d6;
+  font-size: 13px;
+}
+
+.codly-markdown li {
+  margin: 3px 0;
+  line-height: 1.6;
+}
+
+.codly-markdown code {
+  font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+  font-size: 12px;
+  background: rgba(47, 51, 73, 0.6);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #bb9af7;
+}
+
+.codly-markdown pre {
+  margin: 8px 0;
+  padding: 12px 14px;
+  background: rgba(22, 23, 34, 0.8);
+  border: 1px solid rgba(122, 162, 247, 0.08);
+  border-radius: 10px;
+  overflow-x: auto;
+}
+
+.codly-markdown pre code {
+  background: none;
+  padding: 0;
+  color: #a9b1d6;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.codly-markdown strong {
+  color: #c0caf5;
+  font-weight: 600;
+}
+
+.codly-markdown em {
+  color: #bb9af7;
+  font-style: italic;
+}
+
+.codly-markdown blockquote {
+  margin: 8px 0;
+  padding: 8px 14px;
+  border-left: 3px solid #3d59a1;
+  background: rgba(36, 40, 59, 0.4);
+  border-radius: 0 8px 8px 0;
+  color: #a9b1d6;
+  font-size: 13px;
+}
+
+.codly-markdown a {
+  color: #7aa2f7;
+  text-decoration: none;
+}
+
+.codly-markdown a:hover {
+  text-decoration: underline;
+}
+
+.codly-markdown hr {
+  border: none;
+  border-top: 1px solid rgba(122, 162, 247, 0.1);
+  margin: 12px 0;
+}
+
+/* ── Footer ── */
+
+.codly-panel-footer {
+  padding: 8px 16px;
+  border-top: 1px solid rgba(122, 162, 247, 0.07);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #414868;
+}
+
+.codly-panel-footer a {
+  color: #565f89;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.codly-panel-footer a:hover {
+  color: #7aa2f7;
+}
+
+/* ── Animations ── */
+
+@keyframes codly-fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes codly-slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes codly-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes codly-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}

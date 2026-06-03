@@ -1,0 +1,51 @@
+{
+  "manifest_version": 3,
+  "name": "Codly",
+  "version": "1.0.0",
+  "description": "AI-powered code review assistant for GitHub pull requests. Select code and get instant explanations.",
+  "permissions": [
+    "contextMenus",
+    "storage",
+    "activeTab",
+    "scripting",
+    "webNavigation"
+  ],
+  "host_permissions": [
+    "https://github.com/*",
+    "https://api.openai.com/*",
+    "https://keylessai.thryx.workers.dev/*",
+    "http://localhost:9876/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://github.com/*/pull/*"],
+      "js": ["content.js"],
+      "css": [],
+      "run_at": "document_idle"
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["styles.css"],
+      "matches": ["https://github.com/*"]
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=380">
+  <title>Codly Settings</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="codly-popup">
+    <header class="codly-header">
+      <div class="codly-logo">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#7aa2f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="8,4 3,12 8,20"/>
+          <polyline points="16,4 21,12 16,20"/>
+          <circle cx="12" cy="12" r="2" fill="#bb9af7" stroke="none"/>
+        </svg>
+        <span class="codly-title">Codly</span>
+      </div>
+      <span class="codly-version">v1.0.0</span>
+    </header>
+
+    <div class="codly-section">
+      <label class="codly-label" for="provider">Provider</label>
+      <select id="provider" class="codly-select">
+        <option value="keylessai">KeylessAI (free, no key needed)</option>
+        <option value="openai">OpenAI (requires API key)</option>
+      </select>
+    </div>
+
+    <div class="codly-section" id="apiKeySection">
+      <label class="codly-label" for="apiKey">API Key</label>
+      <div class="codly-input-group">
+        <input
+          type="password"
+          id="apiKey"
+          class="codly-input"
+          placeholder="sk-..."
+          spellcheck="false"
+          autocomplete="off"
+        >
+        <button id="toggleVisibility" class="codly-icon-btn" title="Toggle visibility" aria-label="Toggle key visibility">
+          <svg id="eyeIcon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+        </button>
+      </div>
+      <div id="keyStatus" class="codly-status"></div>
+    </div>
+
+    <div class="codly-section">
+      <label class="codly-label" for="model">Model</label>
+      <select id="model" class="codly-select"></select>
+    </div>
+
+    <div class="codly-section">
+      <div class="codly-toggle-row">
+        <div>
+          <div class="codly-label">Include PR context</div>
+          <div class="codly-hint">Send full PR diff for richer explanations</div>
+        </div>
+        <label class="codly-switch">
+          <input type="checkbox" id="includeContext">
+          <span class="codly-switch-track"></span>
+          <span class="codly-switch-thumb"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="codly-section">
+      <div class="codly-toggle-row">
+        <div>
+          <div class="codly-label">Hot Reload</div>
+          <div class="codly-hint">Auto-reload extension on file changes (dev)</div>
+        </div>
+        <label class="codly-switch">
+          <input type="checkbox" id="hotReload">
+          <span class="codly-switch-track"></span>
+          <span class="codly-switch-thumb"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="codly-divider"></div>
+
+    <div class="codly-section">
+      <button id="saveBtn" class="codly-btn-primary">Save Settings</button>
+    </div>
+
+    <div id="saveMessage" class="codly-save-msg"></div>
+
+    <footer class="codly-footer">
+      <span>AI-powered code review assistant</span>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
