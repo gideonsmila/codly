@@ -87,7 +87,8 @@ function buildSystemPrompt(includeContext, prDiff, intent) {
     explain: 'Explain what the selected code does, why it exists, and any patterns or concepts it uses.',
     suggest: 'Suggest concrete improvements to the selected code. Focus on readability, performance, best practices, and potential edge cases. Show improved code when applicable.',
     bugs: 'Analyze the selected code for potential bugs, vulnerabilities, race conditions, off-by-one errors, null/undefined risks, and security issues. Be specific about what could go wrong and how to fix it.',
-    simplify: 'Simplify the selected code. Show a cleaner, more readable version while preserving behavior. Explain what you changed and why it is simpler.'
+    simplify: 'Simplify the selected code. Show a cleaner, more readable version while preserving behavior. Explain what you changed and why it is simpler.',
+    ask: 'Answer the reviewer\'s custom question about the selected code. Use the selected code, any previous Codly answer, and any PR diff context to give a direct, actionable answer.'
   };
 
   const task = intentInstructions[intent] || intentInstructions.explain;
@@ -113,11 +114,18 @@ For the metadata:
 Then write your explanation in clean markdown. Be concise but thorough.`;
 }
 
-function buildUserMessage(selectedText, prDiff, includeContext) {
+function buildUserMessage(selectedText, prDiff, includeContext, customQuestion, previousResponse) {
+  const previousAnswerSection = previousResponse
+    ? `\n\nPrevious Codly answer for this selected code:\n\n\`\`\`markdown\n${previousResponse.slice(0, 8000)}\n\`\`\``
+    : '';
+  const questionSection = customQuestion
+    ? `\n\nReviewer question:\n\n${customQuestion}`
+    : '';
+
   if (includeContext && prDiff) {
-    return `Here is the full PR diff for context:\n\n\`\`\`diff\n${prDiff.slice(0, 30000)}\n\`\`\`\n\nNow, analyze this selected code/text:\n\n\`\`\`\n${selectedText}\n\`\`\``;
+    return `Here is the full PR diff for context:\n\n\`\`\`diff\n${prDiff.slice(0, 30000)}\n\`\`\`\n\nNow, analyze this selected code/text:\n\n\`\`\`\n${selectedText}\n\`\`\`${previousAnswerSection}${questionSection}`;
   }
-  return `Analyze this code/text from a GitHub pull request:\n\n\`\`\`\n${selectedText}\n\`\`\``;
+  return `Analyze this code/text from a GitHub pull request:\n\n\`\`\`\n${selectedText}\n\`\`\`${previousAnswerSection}${questionSection}`;
 }
 
 const PROVIDERS = {
@@ -131,12 +139,12 @@ const PROVIDERS = {
   }
 };
 
-async function streamLLM(provider, apiKey, model, selectedText, prDiff, includeContext, intent, tabId) {
+async function streamLLM(provider, apiKey, model, selectedText, prDiff, includeContext, intent, customQuestion, previousResponse, tabId) {
   const config = PROVIDERS[provider] || PROVIDERS.keylessai;
   const systemPrompt = buildSystemPrompt(includeContext, prDiff, intent);
   const messages = [
     { role: 'system', content: systemPrompt },
-    { role: 'user', content: buildUserMessage(selectedText, prDiff, includeContext) }
+    { role: 'user', content: buildUserMessage(selectedText, prDiff, includeContext, customQuestion, previousResponse) }
   ];
 
   const headers = { 'Content-Type': 'application/json' };
@@ -222,6 +230,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           message.prDiff,
           message.includeContext,
           message.intent || 'explain',
+          message.customQuestion || '',
+          message.previousResponse || '',
           tabId
         );
         sendResponse({ success: true });

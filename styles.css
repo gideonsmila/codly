@@ -483,6 +483,77 @@
   border-color: rgba(122, 162, 247, 0.35);
 }
 
+/* ── Ask Follow-up ── */
+
+.codly-ask-form {
+  display: grid;
+  grid-template-columns: 1fr 34px;
+  gap: 8px;
+  padding: 10px 12px;
+  border-top: 1px solid rgba(122, 162, 247, 0.07);
+  background: rgba(30, 32, 48, 0.45);
+}
+
+.codly-ask-input {
+  min-width: 0;
+  height: 34px;
+  border: 1px solid rgba(122, 162, 247, 0.16);
+  border-radius: 8px;
+  background: rgba(22, 23, 34, 0.85);
+  color: #c0caf5;
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1;
+  padding: 0 10px;
+  outline: none;
+}
+
+.codly-ask-input::placeholder {
+  color: #565f89;
+}
+
+.codly-ask-input:focus {
+  border-color: rgba(122, 162, 247, 0.55);
+  box-shadow: 0 0 0 2px rgba(122, 162, 247, 0.12);
+}
+
+.codly-ask-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(122, 162, 247, 0.28);
+  border-radius: 8px;
+  background: rgba(122, 162, 247, 0.14);
+  color: #7aa2f7;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.codly-ask-submit:hover {
+  background: rgba(122, 162, 247, 0.22);
+  border-color: rgba(122, 162, 247, 0.45);
+}
+
+.codly-ask-submit svg {
+  width: 15px;
+  height: 15px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.codly-ask-error {
+  grid-column: 1 / -1;
+  min-height: 0;
+  color: #f7768e;
+  font-size: 11px;
+  line-height: 1.2;
+}
+
 /* ── Markdown Content ── */
 
 .codly-markdown h1,

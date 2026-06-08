@@ -1,13 +1,13 @@
 # Codly
 
-Codly is a Chrome Manifest V3 extension that adds AI-assisted code review tools to GitHub pull request pages. Select code in a PR diff, then ask Codly to explain it, suggest improvements, find bugs, or simplify it.
+Codly is a Chrome Manifest V3 extension that adds AI-assisted code review tools to GitHub pull request pages. Select code in a PR diff, then ask Codly to explain it, suggest improvements, find bugs, simplify it, or answer a custom follow-up question under the explanation.
 
 ## Features
 
 - Works on GitHub pull request pages.
 - Opens from selected text with a floating action button or the browser context menu.
 - Streams AI responses into a draggable side panel.
-- Supports Explain, Improve, Find Bugs, and Simplify actions.
+- Supports Explain, Improve, Find Bugs, and Simplify actions, with a follow-up question box under the response.
 - Can include the visible PR diff for richer context.
 - Supports either KeylessAI without an API key or OpenAI with your own API key.
 - Includes optional local hot reload for extension development.
@@ -45,14 +45,15 @@ OpenAI API keys are stored in Chrome local extension storage. Do not paste keys 
 1. Open any GitHub pull request.
 2. Select code or text in the PR diff.
 3. Click the Codly sparkle button that appears near the selection.
-4. Read the streamed response in the Codly panel.
-5. Use the quick action buttons to switch between:
+4. Read the streamed explanation in the Codly panel.
+5. Use the follow-up question box under the action row to ask about the selected code.
+6. Use the quick action buttons to switch between:
    - `Explain`
    - `Improve`
    - `Find Bugs`
    - `Simplify`
-6. Use the copy button in the panel header to copy the generated response.
-7. Press `Escape` or click the close button to dismiss the panel.
+7. Use the copy button in the panel header to copy the generated response.
+8. Press `Escape` or click the close button to dismiss the panel.
 
 You can also right-click selected text on a GitHub PR page and choose `Explain with Codly`.
 

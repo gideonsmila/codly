@@ -11,6 +11,7 @@
     lightbulb: `<svg viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 00-4 12.7V17h8v-2.3A7 7 0 0012 2z"/></svg>`,
     bug: `<svg viewBox="0 0 24 24"><path d="M8 2l1.88 1.88M14.12 3.88L16 2M9 7.13v-1a3.003 3.003 0 116 0v1"/><path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 014-4h4a4 4 0 014 4v3c0 3.3-2.7 6-6 6z"/><path d="M12 20v-9M6.53 9C4.6 8.8 3 7.1 3 5"/><path d="M6 13H2"/><path d="M3 21c0-2.1 1.7-3.9 3.8-4"/><path d="M20.97 5c0 2.1-1.6 3.8-3.5 4"/><path d="M22 13h-4"/><path d="M17.2 17c2.1.1 3.8 1.9 3.8 4"/></svg>`,
     wand: `<svg viewBox="0 0 24 24"><path d="M15 4V2M15 16v-2M8 9h2M20 9h2M17.8 11.8L19 13M17.8 6.2L19 5M12.2 11.8L11 13M12.2 6.2L11 5"/><line x1="2" y1="22" x2="15" y2="9"/></svg>`,
+    send: `<svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>`,
     file: `<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`
   };
 
@@ -35,6 +36,8 @@
   let currentSelection = '';
   let currentFileInfo = null;
   let currentIntent = 'explain';
+  let customQuestion = '';
+  let previousResponse = '';
   let streamedText = '';
   let isStreaming = false;
 
@@ -235,6 +238,10 @@
     return text.slice(0, maxLen) + '...';
   }
 
+  function escapeHTML(text) {
+    return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
   // Parse the JSON metadata line from the AI response
   function parseMetadataAndContent(fullText) {
     const lines = fullText.split('\n');
@@ -344,7 +351,7 @@
         </label>
       </div>
       <div class="codly-selected-preview">
-        <code>${truncateText(selectedText).replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code>
+        <code>${escapeHTML(truncateText(selectedText))}</code>
       </div>
       <div class="codly-badges-container"></div>
       <div class="codly-panel-content">
@@ -367,6 +374,13 @@
           ${ICONS.wand}<span>Simplify</span>
         </button>
       </div>
+      <form class="codly-ask-form">
+        <input class="codly-ask-input" type="text" placeholder="Ask a follow-up about this code..." value="${escapeHTML(customQuestion)}">
+        <button class="codly-ask-submit" type="submit" title="Ask Codly" aria-label="Ask Codly">
+          ${ICONS.send}
+        </button>
+        <div class="codly-ask-error" aria-live="polite"></div>
+      </form>
       <div class="codly-panel-footer">
         <span>Powered by OpenAI</span>
       </div>
@@ -408,6 +422,22 @@
         btn.classList.add('active');
         requestExplanation(selectedText);
       });
+    });
+
+    const askForm = panel.querySelector('.codly-ask-form');
+    const askInput = panel.querySelector('.codly-ask-input');
+    askForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const question = askInput.value.trim();
+      const errorEl = panel.querySelector('.codly-ask-error');
+      if (!question) {
+        errorEl.textContent = 'Enter a question first.';
+        askInput.focus();
+        return;
+      }
+      errorEl.textContent = '';
+      customQuestion = question;
+      requestExplanation(selectedText, 'ask');
     });
 
     // Show file badges immediately
@@ -489,7 +519,7 @@
     contentEl.scrollTop = contentEl.scrollHeight;
   }
 
-  function requestExplanation(selectedText) {
+  function requestExplanation(selectedText, intentOverride = currentIntent) {
     const contentEl = panel?.querySelector('.codly-panel-content');
     if (!contentEl) return;
 
@@ -518,7 +548,9 @@
         selectedText,
         prDiff,
         includeContext,
-        intent: currentIntent
+        intent: intentOverride,
+        customQuestion: intentOverride === 'ask' ? customQuestion : '',
+        previousResponse
       },
       (response) => {
         if (chrome.runtime.lastError) {
@@ -552,6 +584,7 @@
 
     if (message.type === 'STREAM_DONE') {
       streamedText = message.fullText;
+      previousResponse = message.fullText;
       isStreaming = false;
       updatePanelContent(streamedText, true);
     }
@@ -559,6 +592,8 @@
     if (message.type === 'CONTEXT_MENU_EXPLAIN' && message.selectedText) {
       currentSelection = message.selectedText;
       currentIntent = 'explain';
+      customQuestion = '';
+      previousResponse = '';
       triggerExplanation(message.selectedText);
     }
   });
@@ -573,6 +608,9 @@
 
       if (text && text.length > 2) {
         currentSelection = text;
+        currentIntent = 'explain';
+        customQuestion = '';
+        previousResponse = '';
         currentFileInfo = detectFileFromSelection();
         const range = selection.getRangeAt(0);
         const rect = range.getBoundingClientRect();
